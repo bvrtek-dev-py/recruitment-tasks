@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/Zad1/database_connector.php";
+require_once __DIR__ . "/Zad1/database-connector.php";
 
 use DI\ContainerBuilder;
 
