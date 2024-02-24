@@ -2,11 +2,12 @@
 
 namespace App\Zad2\Fetcher;
 
+use App\Zad2\Interfaces\UrlFetcherInterface;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class UrlFetcher
+class UrlFetcher implements UrlFetcherInterface
 {
     /**
      * @throws GuzzleException
