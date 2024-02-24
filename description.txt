@@ -1,0 +1,58 @@
+In this file I'm going to describe some features I've used across the project.
+
+1. Composer
+
+In the project I am using Composer. It's mainly due to I have some dependencies to
+install, but it's not the only reason I'm using it. The other reason I am using composer
+is class autoloading. Because of autoloading I can put require_once only in one place
+(main file of project) and I don't need to put require_once in every file where I
+want to use specific class.
+
+2. Dependency Injection
+
+Next thing I'm using is PHP-DI. It's PHP dependency injection tool. PHP-DI gives
+me possibility to autowire dependencies to classes without need to create every new
+class using new keyword.
+
+3. Classes - constructor and properties
+
+In some cases I've written variables in class scope like that
+
+class Example
+{
+    /** @var User $user */
+    private $user;
+}
+
+It's good to notice that in PHP with version >= than 8.0 I would write type not in annotation
+but as a type declaration
+
+class Example
+{
+    private User $user;
+}
+
+Same thing with constructor, instead of writing code like that:
+
+class Example {
+    /** @var User $user */
+    private $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+}
+
+I would use constructor property promotion
+
+class Example {
+    public function __construct(private User $user) {}
+}
+
+4. Module convention
+
+Almost every module in my project is using singular form. The only case I'm using
+plural is Interfaces module. It is due to Interface is PHP keyword and I wouldn't
+use Interface in namespace. From PHP 8.0 I would use Interface as single form
+because from this version word Interface is allowed in namespace.
