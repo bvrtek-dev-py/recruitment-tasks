@@ -4,11 +4,10 @@ namespace Test\Unit;
 
 use App\Zad3\Wrapper\FileWrapper;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 class FileWrapperTest extends TestCase
 {
-    const TEST_CONTENT = 'Example content for tested file';
-    
     /** @var string */
     private $filePath;
     /** @var FileWrapper */
@@ -29,10 +28,41 @@ class FileWrapperTest extends TestCase
     
     public function testWrite(): void
     {
-        $this->fileWrapper->write(self::TEST_CONTENT);
+        // Given
+        $value = 'saved value';
         
+        // When
+        $this->fileWrapper->write($value);
         $content = file_get_contents($this->filePath);
         
-        $this->assertEquals(self::TEST_CONTENT, $content);
+        // Then
+        $this->assertEquals($value, $content);
+    }
+    
+    public function testWriteFail(): void
+    {
+        // Given
+        $value = 'bad value';
+        $checkedValue = 'checked value';
+        
+        // When
+        $this->fileWrapper->write($value);
+        $content = file_get_contents($this->filePath);
+        
+        // Then
+        $this->assertNotEquals($checkedValue, $content);
+    }
+    
+    public function testWriteNotString(): void
+    {
+        // Given
+        $value = ['not string'];
+        
+        // When
+        $this->expectException(TypeError::class);
+        $this->fileWrapper->write($value);
+        
+        // Then
+        $this->assertFileNotEquals($value);
     }
 }

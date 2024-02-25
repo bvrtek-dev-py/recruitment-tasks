@@ -5,38 +5,76 @@ namespace Test\Unit;
 use App\Zad3\Interfaces\LoggerInterface;
 use App\Zad3\Service\LoggerService;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 class LoggerServiceTest extends TestCase
 {
-    const TEST_CONTENT = 'This is a test message 1';
-    
-    /** @var LoggerService */
-    private $loggerService;
-    /** @var LoggerInterface */
-    private $loggerMock;
-    
-    protected function setUp(): void
-    {
-        $this->loggerService = new LoggerService();
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
-    }
-    
     public function testAddLogger(): void
     {
-        $this->loggerService->addLogger($this->loggerMock);
+        // Given
+        $service = new LoggerService();
+        $mockLogger = $this->createMock(LoggerInterface::class);
         
-        $this->assertCount(1, $this->loggerService->getLoggers());
+        // When
+        $service->addLogger($mockLogger);
+        
+        // Then
+        $this->assertCount(1, $service->getLoggers());
+        $this->assertSame($mockLogger, $service->getLoggers()[0]);
     }
     
     public function testLog(): void
     {
-        $this->loggerMock->expects($this->once())
+        // Given
+        $service = new LoggerService();
+        
+        $mockLogger = $this->createMock(LoggerInterface::class);
+        $service->addLogger($mockLogger);
+        
+        $level = 'info';
+        $message = 'test log message';
+        
+        $mockLogger->expects($this->once())
             ->method('log')
-            ->with($this->equalTo('info'), $this->equalTo(self::TEST_CONTENT));
+            ->with($this->equalTo($level), $this->equalTo($message));
         
-        $this->loggerService->addLogger($this->loggerMock);
-        
-        $this->loggerService->log('info', self::TEST_CONTENT);
+        // When
+        $service->log($level, $message);
     }
-
+    
+    public function testAddLoggerWithOtherType(): void
+    {
+        // Given
+        $service = new LoggerService();
+        
+        // When
+        $this->expectException(TypeError::class);
+        $service->addLogger(null);
+    }
+    
+    public function testLogWithNonStringLevel(): void
+    {
+        // Given
+        $service = new LoggerService();
+        
+        $mockLogger = $this->createMock(LoggerInterface::class);
+        $service->addLogger($mockLogger);
+        
+        // When
+        $this->expectException(TypeError::class);
+        $service->log(['info_as_array'], 'test log message');
+    }
+    
+    public function testLogWithNonStringMessage(): void
+    {
+        // Given
+        $service = new LoggerService();
+        
+        $mockLogger = $this->createMock(LoggerInterface::class);
+        $service->addLogger($mockLogger);
+        
+        // When
+        $this->expectException(TypeError::class);
+        $service->log('info', ['message_as_array']);
+    }
 }
