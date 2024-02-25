@@ -3,43 +3,42 @@
 namespace Test\Unit;
 
 use App\Zad3\Logger\DatabaseLogger;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PDO;
 use PDOStatement;
 
 class DatabaseLoggerTest extends TestCase
 {
-    const TEST_CONTENT = 'Test content';
-    
-    /** @var DatabaseLogger */
+    /** @var PDO|MockObject  */
+    private $mockPdo;
+    /** @var DatabaseLogger  */
     private $logger;
-    
-    /** @var PDOStatement */
-    private $statement;
-    
-    /** @var PDO */
-    private $pdo;
+    /** @var MockObject|PDOStatement  */
+    private $mockStatement;
     
     protected function setUp(): void
     {
-        $this->statement = $this->createMock(PDOStatement::class);
-        $this->pdo = $this->createMock(PDO::class);
-        
-        $this->pdo->method('prepare')->willReturn($this->statement);
-        
-        $this->logger = new DatabaseLogger($this->pdo);
+        $this->mockPdo = $this->createMock(PDO::class);
+        $this->logger = new DatabaseLogger($this->mockPdo);
+        $this->mockStatement = $this->createMock(PDOStatement::class);
     }
     
-    public function testLog(): void
+    public function testLogMethodsInvokedOnce()
     {
-        $this->pdo->expects($this->once())
+        // Given
+        $this->mockPdo->expects($this->once())
             ->method('prepare')
-            ->willReturn($this->statement);
+            ->with('INSERT INTO logs (level, message, created_at) VALUES (?, ?, NOW())')
+            ->willReturn($this->mockStatement);
         
-        $this->statement->expects($this->once())
+        
+        $this->mockStatement->expects($this->once())
             ->method('execute')
+            ->with(['info', 'Test message'])
             ->willReturn(true);
-        
-        $this->logger->log('info', self::TEST_CONTENT);
+
+        // When
+        $this->logger->log('info', 'Test message');
     }
 }
