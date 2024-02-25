@@ -47,8 +47,9 @@ class LoggerServiceTest extends TestCase
         // Given
         $service = new LoggerService();
         
-        // When
         $this->expectException(TypeError::class);
+        
+        // When
         $service->addLogger(null);
     }
     
@@ -56,12 +57,12 @@ class LoggerServiceTest extends TestCase
     {
         // Given
         $service = new LoggerService();
-        
         $mockLogger = $this->createMock(LoggerInterface::class);
         $service->addLogger($mockLogger);
         
-        // When
         $this->expectException(TypeError::class);
+        
+        // When
         $service->log(['info_as_array'], 'test log message');
     }
     
@@ -69,12 +70,13 @@ class LoggerServiceTest extends TestCase
     {
         // Given
         $service = new LoggerService();
-        
         $mockLogger = $this->createMock(LoggerInterface::class);
         $service->addLogger($mockLogger);
         
-        // When
         $this->expectException(TypeError::class);
+        
+        
+        // When
         $service->log('info', ['message_as_array']);
     }
 }

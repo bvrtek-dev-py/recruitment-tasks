@@ -27,6 +27,9 @@ class DatabaseLoggerTest extends TestCase
     public function testLogMethodsInvokedOnce()
     {
         // Given
+        $level = 'info';
+        $message = 'Test message';
+        
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->with('INSERT INTO logs (level, message, created_at) VALUES (?, ?, NOW())')
@@ -35,10 +38,10 @@ class DatabaseLoggerTest extends TestCase
         
         $this->mockStatement->expects($this->once())
             ->method('execute')
-            ->with(['info', 'Test message'])
+            ->with([$level, $message])
             ->willReturn(true);
 
         // When
-        $this->logger->log('info', 'Test message');
+        $this->logger->log($level, $message);
     }
 }
