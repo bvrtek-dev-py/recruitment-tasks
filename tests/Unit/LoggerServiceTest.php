@@ -34,6 +34,7 @@ class LoggerServiceTest extends TestCase
         $level = 'info';
         $message = 'test log message';
         
+        // Expects
         $mockLogger->expects($this->once())
             ->method('log')
             ->with($this->equalTo($level), $this->equalTo($message));
@@ -47,6 +48,7 @@ class LoggerServiceTest extends TestCase
         // Given
         $service = new LoggerService();
         
+        // Expects
         $this->expectException(TypeError::class);
         
         // When
@@ -60,6 +62,7 @@ class LoggerServiceTest extends TestCase
         $mockLogger = $this->createMock(LoggerInterface::class);
         $service->addLogger($mockLogger);
         
+        // Expects
         $this->expectException(TypeError::class);
         
         // When
@@ -73,8 +76,8 @@ class LoggerServiceTest extends TestCase
         $mockLogger = $this->createMock(LoggerInterface::class);
         $service->addLogger($mockLogger);
         
+        // Expects
         $this->expectException(TypeError::class);
-        
         
         // When
         $service->log('info', ['message_as_array']);

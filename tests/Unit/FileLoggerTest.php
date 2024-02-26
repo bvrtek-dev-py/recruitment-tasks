@@ -30,7 +30,8 @@ class FileLoggerTest extends TestCase
         $level = 'info';
         $message = 'Example content';
         $expectedLogMessage = sprintf("[%s] [%s] %s\n", $timestamp, $level, $message);
-
+        
+        // Expects
         $this->fileWrapperMock->expects($this->once())
             ->method('write')
             ->with($this->equalTo($expectedLogMessage));
@@ -48,6 +49,7 @@ class FileLoggerTest extends TestCase
         $message = 'Example content';
         $expectedLogMessage = sprintf("[%s] [%s] %s\n", $timestamp, $level, $message);
         
+        // Expects
         $this->fileWrapperMock->expects($this->once())
             ->method('write')
             ->with($this->logicalNot($this->equalTo($expectedLogMessage)));
@@ -65,6 +67,7 @@ class FileLoggerTest extends TestCase
         $message = 'Example content';
         $expectedLogMessage = sprintf("[%s] [%s] %s\n", $timestamp, $level, $message);
         
+        // Expects
         $this->fileWrapperMock->expects($this->once())
             ->method('write')
             ->with($this->logicalNot($this->equalTo($expectedLogMessage)));

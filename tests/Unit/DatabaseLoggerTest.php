@@ -30,6 +30,7 @@ class DatabaseLoggerTest extends TestCase
         $level = 'info';
         $message = 'Test message';
         
+        // Expects
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->with('INSERT INTO logs (level, message, created_at) VALUES (?, ?, NOW())')
