@@ -12,9 +12,9 @@ $container = require_once 'di.php';
 function zad1(Container $container): void
 {
     $service = $container->get(UserService::class);
-    
+
     $users = $service->getAll();
-    
+
     foreach ($users as $user) {
         echo $user->name . "\n";
     }
@@ -27,7 +27,7 @@ function zad2(Container $container): void
     $fetcher = $container->get(UrlFetcher::class);
     
     $data = $fetcher->fetch("https://example/api/data");
-    
+
     foreach ($data as $key => $value) {
         echo $key . ": " . $value . "\n";
     }
